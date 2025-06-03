@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(var(--background-end-rgb))
+  )
+  rgb(var(--background-start-rgb));
+  transition: background 0.5s, color 0.5s;
+}
+
+.glass {
+  background: rgba(255,255,255,0.25);
+  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border-radius: 18px;
+  border: 1.5px solid rgba(255,255,255,0.22);
+  transition: box-shadow 0.3s, background 0.3s;
+}
+
+button, .btn {
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 2px 8px 0 rgba(31,38,135,0.08);
+}
+button:hover, .btn:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 4px 16px 0 rgba(31,38,135,0.14);
+  transform: translateY(-2px) scale(1.03);
+}
+button:active, .btn:active {
+  filter: brightness(0.98);
+  transform: scale(0.97);
+}
+
+input, .input {
+  transition: border 0.2s, box-shadow 0.2s;
+}
+input:focus, .input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px #2563eb33;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    --foreground-rgb: 255,255,255;
+    --background-start-rgb: 30,41,59;
+    --background-end-rgb: 17,24,39;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  }
+  .glass {
+    background: rgba(30,41,59,0.45);
+    border: 1.5px solid rgba(255,255,255,0.10);
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.22);
+  }
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 10px;
+  background: #f3f4f6;
+}
+::-webkit-scrollbar-thumb {
+  background: #a5b4fc;
+  border-radius: 8px;
+  border: 2px solid #f3f4f6;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
+html.dark ::-webkit-scrollbar {
+  background: #1e293b;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+  border: 2px solid #1e293b;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #a5b4fc #f3f4f6;
+}
+html.dark * {
+  scrollbar-color: #334155 #1e293b;
+} 
