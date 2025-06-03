@@ -23,8 +23,6 @@ const nextConfig = {
     }
     return config;
   },
-  // Add allowedDevOrigins to fix cross-origin warning
-  allowedDevOrigins: ['192.168.0.115'],
 };
 
 module.exports = nextConfig; 

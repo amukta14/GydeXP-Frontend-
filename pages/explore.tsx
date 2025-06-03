@@ -5,6 +5,12 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaInstagram, FaTwitter, FaLinkedin, FaMoon, FaSun, FaUserCircle, FaGoogle, FaFacebook, FaHeart, FaRegHeart, FaQuestionCircle, FaChevronDown } from 'react-icons/fa';
 import { useTheme } from '../store/ThemeContext';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import Link from 'next/link';
 
 interface Experience {
   id: number;
@@ -16,53 +22,40 @@ interface Experience {
   image?: string;
 }
 
+// Update the glass effect styles with better contrast and gradients
+const glassEffect = "bg-gradient-to-br from-white/90 to-white/70 dark:from-gray-800/90 dark:to-gray-700/70 backdrop-blur-lg border border-white/20 dark:border-gray-700/20 shadow-lg hover:shadow-xl transition-all duration-300";
+const neumorphicEffect = "bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 shadow-[inset_-12px_-12px_24px_rgba(255,255,255,0.6),inset_12px_12px_24px_rgba(0,0,0,0.15)] dark:shadow-[inset_-12px_-12px_24px_rgba(255,255,255,0.05),inset_12px_12px_24px_rgba(0,0,0,0.3)] hover:shadow-[inset_-8px_-8px_16px_rgba(255,255,255,0.7),inset_8px_8px_16px_rgba(0,0,0,0.2)] dark:hover:shadow-[inset_-8px_-8px_16px_rgba(255,255,255,0.1),inset_8px_8px_16px_rgba(0,0,0,0.4)] transition-all duration-300";
+
 function Navbar({ onAuth }: { onAuth: () => void }) {
   const { theme, setTheme } = useTheme();
   const [open, setOpen] = useState(false);
 
   const themes = [
-    { name: 'Light', value: 'light' },
-    { name: 'Dark', value: 'dark' },
-    { name: 'Blue', value: 'blue' },
-    { name: 'Green', value: 'green' },
-    { name: 'Purple', value: 'purple' },
+    { name: 'Light', value: 'light', icon: <FaSun /> },
+    { name: 'Dark', value: 'dark', icon: <FaMoon /> },
   ];
 
   return (
-    <nav className="w-full sticky top-0 z-30 bg-white/80 dark:bg-gray-900/80 shadow-md py-4 px-6 flex items-center justify-between mb-8 backdrop-blur-lg">
-      <span className="text-xl font-bold text-blue-900 dark:text-blue-200 flex items-center gap-2">
+    <nav className={`w-full sticky top-0 z-30 ${glassEffect} py-4 px-6 flex items-center justify-between mb-8`}>
+      <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
         <Image src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=40&q=80" width={40} height={40} alt="Logo" className="rounded-full" />
         Hotel Explorer
-      </span>
+      </Link>
       <div className="flex items-center gap-4">
         <div className="relative">
-          <button
-            className="flex items-center gap-2 px-3 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-blue-700 dark:text-yellow-300 font-semibold hover:scale-105 transition-transform"
-            onClick={() => setOpen((v) => !v)}
-            aria-haspopup="listbox"
-            aria-expanded={open}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`flex items-center gap-2 px-3 py-1 rounded-lg ${neumorphicEffect} text-gray-700 dark:text-gray-200`}
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
-            Theme <FaChevronDown className="ml-1" />
-          </button>
-          {open && (
-            <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white dark:bg-gray-800 p-2 z-50">
-              {themes.map((t) => (
-                <button
-                  key={t.value}
-                  onClick={() => { setTheme(t.value as any); setOpen(false); }}
-                  className={`w-full px-4 py-2 rounded-md transition-colors text-left ${
-                    theme === t.value
-                      ? 'bg-blue-500 text-white'
-                      : 'text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }`}
-                >
-                  {t.name}
-                </button>
-              ))}
-            </div>
-          )}
+            {theme === 'dark' ? <FaMoon /> : <FaSun />}
+          </Button>
         </div>
-        <FaUserCircle onClick={onAuth} className="text-3xl text-blue-700 dark:text-blue-200 cursor-pointer hover:scale-110 transition-transform" />
+        <Button variant="ghost" size="icon" onClick={onAuth} className={neumorphicEffect}>
+          <FaUserCircle className="text-2xl text-gray-700 dark:text-gray-200" />
+        </Button>
       </div>
     </nav>
   );
@@ -70,11 +63,11 @@ function Navbar({ onAuth }: { onAuth: () => void }) {
 
 function Footer() {
   return (
-    <footer className="w-full bg-white/80 dark:bg-gray-900/80 shadow-inner py-6 px-6 mt-16 text-center text-gray-500 text-sm flex flex-col items-center gap-2 backdrop-blur-lg">
+    <footer className="w-full bg-white/90 dark:bg-gray-900/90 shadow-inner py-6 px-6 mt-16 text-center text-gray-600 dark:text-gray-300 text-sm flex flex-col items-center gap-2 backdrop-blur-lg">
       <div className="flex gap-4 justify-center mb-2">
-        <a href="#" className="text-blue-500 hover:text-blue-700 text-xl"><FaInstagram /></a>
-        <a href="#" className="text-blue-500 hover:text-blue-700 text-xl"><FaTwitter /></a>
-        <a href="#" className="text-blue-500 hover:text-blue-700 text-xl"><FaLinkedin /></a>
+        <a href="#" className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-xl"><FaInstagram /></a>
+        <a href="#" className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-xl"><FaTwitter /></a>
+        <a href="#" className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-xl"><FaLinkedin /></a>
       </div>
       &copy; {new Date().getFullYear()} Hotel Explorer. All rights reserved.
     </footer>
@@ -127,9 +120,9 @@ function AuthModal({ open, onClose }: { open: boolean, onClose: () => void }) {
             <button onClick={onClose} className="absolute top-2 right-2 text-2xl text-gray-400 hover:text-blue-600">×</button>
             <h2 className="text-2xl font-bold mb-4 text-blue-900 dark:text-blue-200 text-center">{isLogin ? 'Sign In' : 'Sign Up'}</h2>
             <form className="flex flex-col gap-4">
-              <input type="email" placeholder="Email" className="rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-              <input type="password" placeholder="Password" className="rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-              {!isLogin && <input type="password" placeholder="Confirm Password" className="rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" />}
+              <Input type="email" placeholder="Email" className="rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+              <Input type="password" placeholder="Password" className="rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+              {!isLogin && <Input type="password" placeholder="Confirm Password" className="rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" />}
               <motion.button whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.03 }} className="w-full py-2 rounded-lg bg-blue-700 text-white font-semibold hover:bg-blue-800 transition">{isLogin ? 'Sign In' : 'Sign Up'}</motion.button>
             </form>
             <div className="flex items-center my-4">
@@ -208,6 +201,70 @@ function GuidedTourModal({ open, onClose }: { open: boolean, onClose: () => void
   );
 }
 
+function ExperienceCard({ exp, onFavorite, isFavorite, onClick }: { 
+  exp: Experience; 
+  onFavorite: () => void; 
+  isFavorite: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <motion.div
+      className={`${glassEffect} rounded-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 p-4 flex flex-col items-center cursor-pointer group focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-gradient-to-br hover:from-white/95 hover:to-white/85 dark:hover:from-gray-800/95 dark:hover:to-gray-700/85`}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.3, type: 'spring', stiffness: 200 }}
+      onClick={onClick}
+      tabIndex={0}
+      role="button"
+      aria-label={`View details for ${exp.title || exp.name}`}
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onClick(); }}
+    >
+      <div className="w-full h-56 relative mb-4 group overflow-hidden rounded-lg">
+        <Image 
+          src={exp.image || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'} 
+          alt={exp.title || exp.name || ''} 
+          fill 
+          className="object-cover group-hover:scale-105 transition-transform duration-500" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <button
+          className={`absolute top-2 right-2 text-2xl text-pink-500 ${glassEffect} rounded-full p-1.5 z-10 focus:outline-none focus:ring-2 focus:ring-pink-400 transform hover:scale-110 transition-transform duration-200`}
+          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          onClick={e => { e.stopPropagation(); onFavorite(); }}
+          tabIndex={0}
+        >
+          {isFavorite ? <FaHeart className="animate-bounce" /> : <FaRegHeart />}
+        </button>
+      </div>
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+        {exp.title || exp.name}
+      </h3>
+      <p className="text-gray-700 dark:text-gray-300 text-sm text-center mb-3 line-clamp-2">
+        {exp.description}
+      </p>
+      {exp.rating && (
+        <div className="flex items-center gap-2">
+          <StarRating rating={exp.rating} />
+          <span className="text-sm text-gray-600 dark:text-gray-400">({exp.rating})</span>
+        </div>
+      )}
+      {exp.distance && (
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+          <span className="inline-flex items-center gap-1">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {exp.distance}
+          </span>
+        </p>
+      )}
+    </motion.div>
+  );
+}
+
 export default function Explore() {
   const [internalExperiences, setInternalExperiences] = useState<Experience[]>([]);
   const [externalExperiences, setExternalExperiences] = useState<Experience[]>([]);
@@ -275,189 +332,163 @@ export default function Explore() {
   const themeBg = {
     light: 'bg-white',
     dark: 'bg-gray-900',
-    blue: 'bg-blue-50',
-    green: 'bg-green-50',
-    purple: 'bg-purple-50',
   }[theme];
   const themeText = {
     light: 'text-gray-900',
     dark: 'text-white',
-    blue: 'text-blue-900',
-    green: 'text-green-900',
-    purple: 'text-purple-900',
-  }[theme];
-  const blob1 = {
-    light: 'bg-blue-300',
-    dark: 'bg-blue-900',
-    blue: 'bg-blue-300',
-    green: 'bg-green-200',
-    purple: 'bg-purple-300',
-  }[theme];
-  const blob2 = {
-    light: 'bg-pink-200',
-    dark: 'bg-pink-900',
-    blue: 'bg-blue-200',
-    green: 'bg-green-300',
-    purple: 'bg-purple-200',
   }[theme];
 
   return (
-    <div className={`min-h-screen flex flex-col transition-colors duration-300 relative overflow-hidden ${themeBg} ${themeText}`}>
-      {/* Animated background blobs */}
-      <motion.div
-        className={`absolute -top-32 -left-32 w-96 h-96 ${blob1} rounded-full filter blur-3xl opacity-30 z-0`}
-        animate={{ scale: [1, 1.2, 1], x: [0, 40, 0], y: [0, 20, 0] }}
-        transition={{ repeat: Infinity, duration: 10, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className={`absolute -bottom-32 -right-32 w-96 h-96 ${blob2} rounded-full filter blur-3xl opacity-30 z-0`}
-        animate={{ scale: [1, 1.1, 1], x: [0, -40, 0], y: [0, -20, 0] }}
-        transition={{ repeat: Infinity, duration: 12, ease: 'easeInOut' }}
-      />
+    <div className="min-h-screen flex flex-col transition-colors duration-300 relative overflow-hidden bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800">
       <Navbar onAuth={() => setAuthOpen(true)} />
-      <main className="flex-1 py-8 px-2 md:px-8 relative z-10">
-        <h1 className="text-4xl font-extrabold text-center mb-10 text-blue-900 dark:text-blue-200 tracking-tight">Explore</h1>
-        <div className="max-w-2xl mx-auto mb-8 flex items-center gap-3">
-          <input
+      <main className="flex-1 py-8 px-4 md:px-8 relative z-10">
+        <motion.h1 
+          className="text-4xl font-extrabold text-center mb-10 text-gray-900 dark:text-white tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Explore
+        </motion.h1>
+        <motion.div 
+          className="max-w-2xl mx-auto mb-8 flex items-center gap-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <Input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search experiences..."
-            className="w-full rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
+            className={`w-full rounded-lg px-4 py-2 ${neumorphicEffect} border-0 focus:ring-2 focus:ring-blue-400 text-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400`}
             aria-label="Search experiences"
           />
-        </div>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        </motion.div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Internal Experiences */}
-          <section>
-            <h2 className="text-2xl font-bold mb-4 text-blue-800 dark:text-blue-300">Internal Experiences</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <motion.section
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Internal Experiences</h2>
+            <div className="grid grid-cols-1 gap-6">
               {loading ? (
                 Array(2).fill(0).map((_, idx) => (
-                  <div key={idx} className="glass rounded-xl shadow-lg p-4 flex flex-col items-center animate-pulse" aria-busy="true" aria-label="Loading experience card" />
+                  <div key={idx} className={`${glassEffect} rounded-xl p-4 flex flex-col items-center animate-pulse`} aria-busy="true" aria-label="Loading experience card" />
                 ))
               ) : (
                 filteredInternal.map((exp, idx) => (
-                  <motion.div
+                  <ExperienceCard
                     key={exp.id}
-                    className="glass rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-1 hover:scale-105 transition-all duration-200 p-4 flex flex-col items-center cursor-pointer group focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    whileHover={{ scale: 1.07, rotateZ: 2 }}
-                    whileTap={{ scale: 0.98, rotateZ: -2 }}
-                    transition={{ delay: idx * 0.08, duration: 0.5, type: 'spring', stiffness: 120 }}
+                    exp={exp}
+                    onFavorite={() => toggleFavorite(exp.id)}
+                    isFavorite={favorites.includes(exp.id)}
                     onClick={() => setModalExp(exp)}
-                    tabIndex={0}
-                    role="button"
-                    aria-label={`View details for ${exp.title}`}
-                    onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setModalExp(exp); }}
-                  >
-                    <div className="w-full h-40 relative mb-3 group">
-                      <Image src={exp.image || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'} alt={exp.title || ''} fill className="object-cover rounded-lg group-hover:scale-105 transition-transform duration-200" />
-                      <button
-                        className="absolute top-2 right-2 text-2xl text-pink-500 bg-white/80 dark:bg-gray-900/80 rounded-full p-1 z-10 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                        aria-label={favorites.includes(exp.id) ? 'Remove from favorites' : 'Add to favorites'}
-                        onClick={e => { e.stopPropagation(); toggleFavorite(exp.id); }}
-                        tabIndex={0}
-                      >
-                        {favorites.includes(exp.id) ? <FaHeart /> : <FaRegHeart />}
-                      </button>
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{exp.title}</h3>
-                    <p className="text-gray-900 dark:text-gray-200 text-sm text-center mb-2">{exp.description}</p>
-                    {exp.rating && <StarRating rating={exp.rating} />}
-                  </motion.div>
+                  />
                 ))
               )}
             </div>
-          </section>
+          </motion.section>
           {/* 3D Hotel Map */}
-          <section className="flex flex-col items-center justify-center">
-            <h2 className="text-2xl font-bold mb-4 text-blue-800 dark:text-blue-300">3D Hotel Map</h2>
-            <div className="w-full max-w-md glass rounded-xl shadow-lg p-4">
+          <motion.section 
+            className="flex flex-col items-center justify-center"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
+            <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">3D Hotel Map</h2>
+            <div className={`w-full ${glassEffect} rounded-xl p-4`}>
               {loading ? (
-                <div className="w-full h-[400px] bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+                <div className="w-full h-[500px] bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
               ) : (
                 <HotelMap3D />
               )}
             </div>
-          </section>
+          </motion.section>
         </div>
         {/* External Experiences */}
-        <section className="max-w-3xl mx-auto mt-12">
-          <h2 className="text-2xl font-bold mb-4 text-blue-800 dark:text-blue-300">External Experiences</h2>
-          <div className="mb-4 flex items-center gap-2">
+        <motion.section 
+          className="max-w-4xl mx-auto mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+        >
+          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">External Experiences</h2>
+          <div className="mb-6 flex items-center gap-2">
             <label htmlFor="ratingFilter" className="text-gray-700 dark:text-gray-200">Filter by rating:</label>
-            <select id="ratingFilter" value={ratingFilter ?? ''} onChange={e => setRatingFilter(e.target.value ? Number(e.target.value) : null)} className="rounded px-2 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700">
-              <option value="">All</option>
-              <option value="4">4+</option>
-              <option value="4.5">4.5+</option>
-              <option value="5">5</option>
-            </select>
+            <Select value={ratingFilter?.toString() || ''} onValueChange={value => setRatingFilter(value ? Number(value) : null)}>
+              <SelectTrigger className={`w-[120px] ${neumorphicEffect} border-0 text-gray-900 dark:text-white`}>
+                <SelectValue placeholder="Filter by rating" />
+              </SelectTrigger>
+              <SelectContent className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                <SelectItem value="4" className="text-gray-900 dark:text-white">4+</SelectItem>
+                <SelectItem value="4.5" className="text-gray-900 dark:text-white">4.5+</SelectItem>
+                <SelectItem value="5" className="text-gray-900 dark:text-white">5</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {loading ? (
               Array(2).fill(0).map((_, idx) => (
-                <div key={idx} className="glass rounded-xl shadow-lg p-4 animate-pulse" aria-busy="true" aria-label="Loading experience card" />
+                <div key={idx} className={`${glassEffect} rounded-xl p-4 animate-pulse`} aria-busy="true" aria-label="Loading experience card" />
               ))
             ) : (
-              filteredExternal.filter(exp => ratingFilter == null || (exp.rating ?? 0) >= ratingFilter).map((exp, idx) => (
-                <motion.div
-                  key={exp.id}
-                  className="glass rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-1 hover:scale-105 transition-all duration-200 p-4 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ scale: 1.07, rotateZ: 2 }}
-                  whileTap={{ scale: 0.98, rotateZ: -2 }}
-                  transition={{ delay: idx * 0.08, duration: 0.5 }}
-                  onClick={() => setModalExp(exp)}
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`View details for ${exp.name}`}
-                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setModalExp(exp); }}
-                >
-                  <div className="absolute top-2 right-2 z-10">
-                    <button
-                      className="text-2xl text-pink-500 bg-white/80 dark:bg-gray-900/80 rounded-full p-1 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                      aria-label={favorites.includes(exp.id) ? 'Remove from favorites' : 'Add to favorites'}
-                      onClick={e => { e.stopPropagation(); toggleFavorite(exp.id); }}
-                      tabIndex={0}
-                    >
-                      {favorites.includes(exp.id) ? <FaHeart /> : <FaRegHeart />}
-                    </button>
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{exp.name}</h3>
-                  <p className="text-gray-900 dark:text-gray-200 text-sm">Distance: {exp.distance}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-gray-600 dark:text-gray-300 text-sm">Rating:</span>
-                    <StarRating rating={exp.rating || 0} />
-                  </div>
-                </motion.div>
-              ))
+              filteredExternal
+                .filter(exp => ratingFilter == null || (exp.rating ?? 0) >= ratingFilter)
+                .map((exp, idx) => (
+                  <ExperienceCard
+                    key={exp.id}
+                    exp={exp}
+                    onFavorite={() => toggleFavorite(exp.id)}
+                    isFavorite={favorites.includes(exp.id)}
+                    onClick={() => setModalExp(exp)}
+                  />
+                ))
             )}
           </div>
-        </section>
-        {/* Google Maps static image below 3D map */}
-        <section className="flex flex-col items-center justify-center mt-8">
-          <h3 className="text-lg font-semibold mb-2 text-blue-800 dark:text-blue-300">Nearby on Map</h3>
-          <div className="w-full max-w-md glass rounded-xl shadow-lg p-2 flex justify-center">
-            <img src="https://static-maps.yandex.ru/1.x/?lang=en-US&ll=103.8603,1.2831&z=15&l=map&size=400,200&pt=103.8603,1.2831,pm2blm" alt="Nearby Map" className="rounded-lg w-full h-48 object-cover" />
+        </motion.section>
+        {/* Google Maps section */}
+        <motion.section 
+          className="flex flex-col items-center justify-center mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1 }}
+        >
+          <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Nearby on Map</h3>
+          <div className={`w-full max-w-4xl ${glassEffect} rounded-xl p-2 flex justify-center overflow-hidden`}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8191673767!2d103.8571113!3d1.2831!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19a936c551cd%3A0x7fb4e58ad9cd826e!2sMarina%20Bay%20Sands!5e0!3m2!1sen!2ssg!4v1647881234567!5m2!1sen!2ssg"
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="rounded-lg"
+            />
           </div>
-        </section>
+        </motion.section>
       </main>
       <Footer />
       <ExperienceModal exp={modalExp} onClose={() => setModalExp(null)} />
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
       <GuidedTourModal open={tourOpen} onClose={() => setTourOpen(false)} />
       {/* Take a Tour Floating Button */}
-      <button
-        className="fixed bottom-6 right-6 z-40 bg-blue-700 text-white rounded-full p-4 shadow-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center gap-2 text-lg"
+      <motion.button
+        className={`fixed bottom-6 right-6 z-40 ${glassEffect} rounded-full p-4 shadow-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center gap-2 text-lg text-gray-900 dark:text-white`}
         onClick={() => setTourOpen(true)}
         aria-label="Take a Tour"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 1.2 }}
       >
         <FaQuestionCircle className="text-2xl" />
         <span className="hidden sm:inline">Take a Tour</span>
-      </button>
+      </motion.button>
     </div>
   );
 } 

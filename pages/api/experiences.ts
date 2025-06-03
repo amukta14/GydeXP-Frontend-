@@ -1,13 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import fs from 'fs';
-import path from 'path';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import data from '../../data.json';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const filePath = path.join(process.cwd(), 'data.json');
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  const data = JSON.parse(fileContents);
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  // Simulate network latency
+  await new Promise(resolve => setTimeout(resolve, 200));
 
-  setTimeout(() => {
-    res.status(200).json(data);
-  }, 200);
+  // Return the mock data
+  res.status(200).json(data);
 } 

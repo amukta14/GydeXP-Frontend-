@@ -2,7 +2,7 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { ThemeProvider } from '../store/ThemeContext';
+import { ThemeProvider } from '@/store/ThemeContext';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { useEffect } from 'react';
 
