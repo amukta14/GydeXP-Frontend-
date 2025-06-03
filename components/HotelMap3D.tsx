@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaInfoCircle } from 'react-icons/fa';
 import * as THREE from 'three';
+import dynamic from 'next/dynamic';
 
 interface RoomProps {
   position: [number, number, number];
@@ -112,7 +113,7 @@ function Scene() {
   );
 }
 
-export default function HotelMap3D() {
+function HotelMap3DComponent() {
   return (
     <div className="w-full h-[500px] relative">
       <Canvas shadows camera={{ position: [0, 5, 10], fov: 50 }}>
@@ -124,4 +125,11 @@ export default function HotelMap3D() {
       </div>
     </div>
   );
-} 
+}
+
+// Use dynamic import with SSR disabled for the 3D component
+const HotelMap3D = dynamic(() => Promise.resolve(HotelMap3DComponent), {
+  ssr: false
+});
+
+export default HotelMap3D; 
