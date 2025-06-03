@@ -129,7 +129,12 @@ function HotelMap3DComponent() {
 
 // Use dynamic import with SSR disabled for the 3D component
 const HotelMap3D = dynamic(() => Promise.resolve(HotelMap3DComponent), {
-  ssr: false
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[500px] relative flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+      <div className="text-gray-500 dark:text-gray-400">Loading 3D Map...</div>
+    </div>
+  )
 });
 
 export default HotelMap3D; 
