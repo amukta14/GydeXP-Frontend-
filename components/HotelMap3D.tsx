@@ -86,11 +86,11 @@ function HotelWalls() {
 }
 
 function Scene() {
-  const rooms = [
-    { position: [-4, 0, -4], size: [3, 3, 3], title: 'Spa', color: '#F472B6' },
-    { position: [4, 0, -4], size: [3, 3, 3], title: 'Gym', color: '#60A5FA' },
-    { position: [-4, 0, 4], size: [3, 3, 3], title: 'Restaurant', color: '#34D399' },
-    { position: [4, 0, 4], size: [3, 3, 3], title: 'Pool', color: '#818CF8' },
+  const rooms: RoomProps[] = [
+    { position: [-4, 0, -4] as [number, number, number], size: [3, 3, 3] as [number, number, number], title: 'Spa', color: '#F472B6' },
+    { position: [4, 0, -4] as [number, number, number], size: [3, 3, 3] as [number, number, number], title: 'Gym', color: '#60A5FA' },
+    { position: [-4, 0, 4] as [number, number, number], size: [3, 3, 3] as [number, number, number], title: 'Restaurant', color: '#34D399' },
+    { position: [4, 0, 4] as [number, number, number], size: [3, 3, 3] as [number, number, number], title: 'Pool', color: '#818CF8' },
   ];
 
   return (
