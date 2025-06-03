@@ -3,6 +3,7 @@ import { OrbitControls, Html } from '@react-three/drei';
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaInfoCircle } from 'react-icons/fa';
+import * as THREE from 'three';
 
 interface RoomProps {
   position: [number, number, number];
@@ -16,13 +17,12 @@ function Room({ position, size, title, color = '#4B5563' }: RoomProps) {
   const meshRef = useRef<THREE.Mesh>(null);
 
   return (
-    <motion.mesh
+    <mesh
       ref={meshRef}
       position={position}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
-      whileHover={{ scale: 1.05 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+      scale={hovered ? 1.05 : 1}
     >
       <boxGeometry args={size} />
       <meshStandardMaterial 
@@ -49,7 +49,7 @@ function Room({ position, size, title, color = '#4B5563' }: RoomProps) {
           {title}
         </motion.div>
       </Html>
-    </motion.mesh>
+    </mesh>
   );
 }
 
