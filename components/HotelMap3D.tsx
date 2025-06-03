@@ -1,14 +1,24 @@
 import { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
+import { Mesh } from 'three';
 import useExperienceStore from '../store/useExperienceStore';
 
-const Room = ({ position, size, title, onClick }) => {
-  const meshRef = useRef();
+interface RoomProps {
+  position: [number, number, number];
+  size: [number, number, number];
+  title: string;
+  onClick: () => void;
+}
+
+const Room = ({ position, size, title, onClick }: RoomProps) => {
+  const meshRef = useRef<Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
   useFrame(() => {
-    meshRef.current.rotation.y += 0.01;
+    if (meshRef.current) {
+      meshRef.current.rotation.y += 0.01;
+    }
   });
 
   return (
@@ -41,9 +51,9 @@ export default function HotelMap3D() {
   const { setSelectedExperience } = useExperienceStore();
 
   const rooms = [
-    { position: [0, 0, 0], size: [1, 1, 1], title: 'Spa', id: 1001 },
-    { position: [2, 0, 0], size: [1, 1, 1], title: 'Gym', id: 1002 },
-    { position: [0, 0, 2], size: [1, 1, 1], title: 'Lobby', id: 1003 },
+    { position: [0, 0, 0] as [number, number, number], size: [1, 1, 1] as [number, number, number], title: 'Spa', id: 1001 },
+    { position: [2, 0, 0] as [number, number, number], size: [1, 1, 1] as [number, number, number], title: 'Gym', id: 1002 },
+    { position: [0, 0, 2] as [number, number, number], size: [1, 1, 1] as [number, number, number], title: 'Lobby', id: 1003 },
   ];
 
   return (
